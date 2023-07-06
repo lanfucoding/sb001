@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sb001.mapper.FileMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.sb001.model.File">
+            <id property="fileid" column="fileId" jdbcType="INTEGER"/>
+            <result property="username" column="userName" jdbcType="VARCHAR"/>
+            <result property="filepath" column="filePath" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        fileId,userName,filePath
+    </sql>
+</mapper>
