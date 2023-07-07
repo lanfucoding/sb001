@@ -3,6 +3,8 @@ package com.example.sb001.service;
 import com.example.sb001.model.File;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
 * @author mxhc
 * @description 针对表【file】的数据库操作Service
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface FileService extends IService<File> {
 
+    public void addNewNameSpace(HttpServletRequest request, String namespace);
 }
