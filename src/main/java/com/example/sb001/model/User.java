@@ -15,6 +15,7 @@ import lombok.Data;
 @Data
 public class User implements Serializable {
     public static final String RECYCLE = "recycle";
+    public static final String NAMESPACE = "username";
     /**
      * 
      */

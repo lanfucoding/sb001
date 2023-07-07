@@ -37,6 +37,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return true;
     }
+
+    @Override
+    public User findOne(User user) {
+        user.setPassword(DigestUtil.md5Hex(user.getPassword()));
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.setEntity(user);
+        return userMapper.selectOne(lambdaQueryWrapper);
+    }
 }
 
 
