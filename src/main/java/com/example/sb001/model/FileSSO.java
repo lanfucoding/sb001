@@ -13,10 +13,16 @@ import lombok.Data;
  */
 @TableName(value ="file")
 @Data
-public class File implements Serializable {
+
+public class FileSSO implements Serializable {
+    public FileSSO(String filepath) {
+        this.filepath = filepath;
+    }
+
     /**
      * 
      */
+
     @TableId(type = IdType.AUTO)
     private Integer fileid;
 
@@ -29,6 +35,8 @@ public class File implements Serializable {
      * 
      */
     private String filepath;
+
+
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

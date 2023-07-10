@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.sb001.mapper.FileMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.sb001.model.File">
+    <resultMap id="BaseResultMap" type="com.example.sb001.model.FileSSO">
             <id property="fileid" column="fileId" jdbcType="INTEGER"/>
             <result property="username" column="userName" jdbcType="VARCHAR"/>
             <result property="filepath" column="filePath" jdbcType="VARCHAR"/>
