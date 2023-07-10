@@ -1,3 +1,5 @@
+
+
 /**当前文件路径指针*/
 var currentPath;
 	$(document).ready(function() {
@@ -15,6 +17,48 @@ var currentPath;
 		//显示隐藏操作栏
 		$("#operation").hide()
 	});
+
+function changeTypeTab(type){
+	$.post("file/searchFile.action", {
+		"regType" : type
+	}, function(data) {
+		if (data.success) {
+			var typeName = type+"Tab";
+			if(type == "image"){
+				$("#"+ typeName).empty();
+				$.each(data.data, function() {
+					var url = encodeURI('currentPath='+this.currentPath+'&fileType='+this.fileType+'&fileName='+this.fileName);
+					$("#"+ typeName).append('<a href="file/openFile.action?'+url+'" data-lightbox="roadtrip" title="'
+						+this.fileName+'"><img alt="'+this.fileName+'" style="margin: 10px" src="file/openFile.action?'+url+'" width="150" height="150"></a>')
+				});
+			}else{
+				$("#"+ typeName + " tbody").empty();
+				$.each(data.data, function() {
+					$("#"+ typeName + " tbody").append('<tr><td><a href="#" onclick="return openFile(this)" filetype="'+this.fileType+'" currentPath="'
+						+this.currentPath+'"><span class="glyphicon glyphicon-'+this.fileType+'" style="margin-right: 10px"></span>'
+						+this.fileName+'</a></td><td>'+this.fileSize+'</td><td>'+this.lastTime+'</td></tr>');
+				});
+			}
+		}
+	});
+	return false;
+}
+
+function searchFileType(type){
+	var tabName = type + "Tab";
+	$("#fileTypeList li").has("a[aria-controls='"+tabName+"']").addClass("active").siblings().removeClass("active");
+	$("#"+tabName).addClass("active").siblings().removeClass("active");
+	changeTypeTab(type);
+	layer.open({
+		type: 1,
+		zIndex : 80,
+		area: ['890px', '450px'],
+		title:false,
+		content: $("#fileTypeList")
+	});
+	return false;
+}
+
 	function selectCheckbox(){
 		$inputs = $("input[name='check_name']");
 		var len = $inputs.filter(":checked").length;

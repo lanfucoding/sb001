@@ -47,8 +47,6 @@ public class UserController {
     @RequestMapping("/login")
     public String login(HttpServletRequest request,User user){
         if(user.getUsername() ==null || user.getUsername().equals("") || user.getPassword() == null || user.getPassword().equals("")){
-
-
             return pre + "login";
         }
         User exsitUser = userService.findOne(user);
@@ -56,7 +54,7 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute(User.NAMESPACE,exsitUser.getUsername());
             session.setAttribute("totalSize",exsitUser.getTotalsize());
-            return "redirect:/index";
+            return pre + "index";
         }else {
             request.setAttribute("msg","用户名或密码错误");
             return pre + "login";

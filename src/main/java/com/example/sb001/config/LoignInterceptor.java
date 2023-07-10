@@ -25,9 +25,9 @@ public class LoignInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
         String url = request.getRequestURI();
 
-        if (url.indexOf("login") >= 0 || url.indexOf("regist") >= 0 || url.indexOf("share") >= 0 || url.indexOf("getShareFiles") >= 0 || url.indexOf("download") >= 0 || url.indexOf("loginForApp") >= 0 || url.indexOf("getAppFiles") >= 0|| url.indexOf("uploadForApp") >= 0) {
-            return true;
-        }
+//        if (url.indexOf("login") >= 0 || url.indexOf("regist") >= 0 || url.indexOf("share") >= 0 || url.indexOf("getShareFiles") >= 0 || url.indexOf("download") >= 0 || url.indexOf("loginForApp") >= 0 || url.indexOf("getAppFiles") >= 0|| url.indexOf("uploadForApp") >= 0) {
+//            return true;
+//        }
 
         String username = (String) request.getSession().getAttribute(User.NAMESPACE);
 
