@@ -45,6 +45,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         lambdaQueryWrapper.setEntity(user);
         return userMapper.selectOne(lambdaQueryWrapper);
     }
+
+    public String getCountSize(String username){
+        String countSize = null;
+        try {
+            countSize = userMapper.getCountSize(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return countSize;
+        }
+        return countSize;
+    }
 }
 
 

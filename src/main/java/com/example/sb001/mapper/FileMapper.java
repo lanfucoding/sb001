@@ -2,6 +2,8 @@ package com.example.sb001.mapper;
 
 import com.example.sb001.model.File;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+
 
 /**
 * @author mxhc
@@ -11,6 +13,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface FileMapper extends BaseMapper<File> {
 
+
+    void insertFile( String filename, String filePath);
 }
 
 

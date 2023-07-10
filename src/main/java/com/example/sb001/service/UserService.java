@@ -13,4 +13,6 @@ public interface UserService extends IService<User> {
     boolean addUser(User user);
 
     User findOne(User user);
+
+    public String getCountSize(String username);
 }

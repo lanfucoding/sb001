@@ -47,7 +47,8 @@ public class UserController {
     @RequestMapping("/login")
     public String login(HttpServletRequest request,User user){
         if(user.getUsername() ==null || user.getUsername().equals("") || user.getPassword() == null || user.getPassword().equals("")){
-                request.setAttribute("msg", "请输入用户名或密码");
+
+
             return pre + "login";
         }
         User exsitUser = userService.findOne(user);

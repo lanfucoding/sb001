@@ -36,7 +36,7 @@ public class LoignInterceptor implements HandlerInterceptor {
         }
 
         response.sendRedirect("user/login");
-        return false;
+        return true;
     }
 
 }

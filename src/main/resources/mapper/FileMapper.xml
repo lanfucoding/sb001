@@ -13,4 +13,11 @@
     <sql id="Base_Column_List">
         fileId,userName,filePath
     </sql>
+
+    <insert id="insertFile">
+        INSERT INTO file_info (uesrname, filepath)
+        VALUES (#{name}, #{path})
+    </insert>
+
 </mapper>
+
