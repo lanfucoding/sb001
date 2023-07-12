@@ -3,7 +3,10 @@ package com.example.sb001.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.sb001.model.FileSSO;
+import com.example.sb001.model.RecycleFile;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 
 /**
@@ -14,8 +17,9 @@ import org.apache.ibatis.annotations.Mapper;
 */
 public interface FileMapper extends BaseMapper<FileSSO> {
 
+    List<RecycleFile> selectFiles(String username);
 
-    void insertFile( String filename, String filePath);
+    RecycleFile selectFile(Integer id);
 }
 
 

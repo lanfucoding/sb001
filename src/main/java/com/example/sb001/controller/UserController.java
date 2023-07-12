@@ -1,6 +1,8 @@
 package com.example.sb001.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.sb001.model.FileCustom;
+import com.example.sb001.model.Result;
 import com.example.sb001.model.User;
 import com.example.sb001.service.FileService;
 import com.example.sb001.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -43,6 +46,20 @@ public class UserController {
         }
     }
 
+
+    @RequestMapping("/searchFile")
+    public @ResponseBody Result<List<FileCustom>> searchFile(String reg, String currentPath, String regType, HttpServletRequest request) {
+        try {
+            List<FileCustom> searchFile = fileService.searchFile(request,
+                    currentPath, reg, regType);
+            Result<List<FileCustom>> result = new Result<>(376, true, "查找成功");
+            result.setData(searchFile);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(371, false, "查找失败");
+        }
+    }
 
     @RequestMapping("/login")
     public String login(HttpServletRequest request,User user){

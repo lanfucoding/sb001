@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.example.sb001.controller.UserController.pre;
+
 @Controller
 public class IndexController {
     @Autowired
@@ -23,6 +25,6 @@ public class IndexController {
         String username = UserUtils.getUsername(request);
         String countSize = userService.getCountSize(username);
         request.setAttribute("countSize", countSize);
-        return "index";
+        return pre + "index";
     }
 }

@@ -14,10 +14,14 @@
         fileId,userName,filePath
     </sql>
 
-    <insert id="insertFile">
-        INSERT INTO file_info (uesrname, filepath)
-        VALUES (#{name}, #{path})
-    </insert>
+    <select id="selectFiles" resultType="com.example.sb001.model.RecycleFile">
+        select * from File where userName = #{userName}
+    </select>
+
+    <select id="selectFile" resultType="com.example.sb001.model.RecycleFile">
+        select * from File where fileId = #{fileId}
+    </select>
+
 
 </mapper>
 

@@ -18,15 +18,15 @@ import java.util.List;
 import static com.example.sb001.controller.UserController.pre;
 
 @Controller
-@RequestMapping("/user/file")
-public class FileController {
+@RequestMapping("/file")
+public class ReFileController {
 
     @Autowired
     FileService fileService;
     @Autowired
     HttpServletRequest request;
 
-    @RequestMapping("/getFiles")
+    @RequestMapping("/file/getFiles")
     @ResponseBody
     public Result<List<FileCustom>> getFiles(HttpServletRequest request,String path) {
         //根据项目路径及用户名、文件名获取上传文件的真实路径
@@ -38,6 +38,17 @@ public class FileController {
                 true, "获取成功");
         result.setData(listFile);
         return result;
+    }
+
+    @RequestMapping("/delAllRecycle")
+    public @ResponseBody Result<String> delAllRecycleDirectory() {
+        try {
+            fileService.delAllRecycle(request);
+            // 返回状态码
+            return new Result<>(327, true, "删除成功");
+        } catch (Exception e) {
+            return new Result<>(322, false, "删除失败");
+        }
     }
 
 
@@ -94,7 +105,7 @@ public class FileController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "recycle";
+        return pre + "recycle";
     }
 
     @RequestMapping("/revertDirectory")
