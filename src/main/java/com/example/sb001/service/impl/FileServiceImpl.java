@@ -51,10 +51,29 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileSSO>
         return realpath;
     }
 
-    @Override
-    public List<FileCustom> listFile(String path) {
-       return null;
+    public List<FileCustom> listFile(String realPath) {
+        File[] files = new File(realPath).listFiles();
+        List<FileCustom> lists = new ArrayList<FileCustom>();
+        if (files != null) {
+            for (File file : files) {
+                if (!file.getName().equals(User.RECYCLE)) {
+                    FileCustom custom = new FileCustom();
+                    custom.setFileName(file.getName());
+                    custom.setLastTime(FileUtils.formatTime(file.lastModified()));
+                    custom.setCurrentPath(realPath);
+                    if (file.isDirectory()) {
+                        custom.setFileSize("-");
+                    } else {
+                        custom.setFileSize(FileUtils.getDataSize(file.length()));
+                    }
+                    custom.setFileType(FileUtils.getFileType(file));
+                    lists.add(custom);
+                }
+            }
+        }
+        return lists;
     }
+
 
     @Override
     public List<FileCustom> searchFile(HttpServletRequest request, String currentPath, String reg, String regType) {
