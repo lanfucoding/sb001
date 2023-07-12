@@ -3,7 +3,6 @@ package com.example.sb001.controller;
 import com.example.sb001.model.FileCustom;
 import com.example.sb001.model.Result;
 import com.example.sb001.service.FileService;
-import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,8 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/user/file")
 public class FileController {
-
-
 
     @Autowired
     FileService fileService;
