@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sb001.mapper.ShareMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.sb001.model.Share">
+            <id property="shareid" column="shareId" jdbcType="INTEGER"/>
+            <result property="shareurl" column="shareUrl" jdbcType="VARCHAR"/>
+            <result property="path" column="path" jdbcType="VARCHAR"/>
+            <result property="shareuser" column="shareUser" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="command" column="command" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        shareId,shareUrl,path,
+        shareUser,status,command
+    </sql>
+</mapper>
