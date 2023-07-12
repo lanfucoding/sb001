@@ -23,7 +23,7 @@ public interface FileService extends IService<FileSSO> {
 
     public  List<FileCustom> listFile(String path);
 
-
+    public void uploadFilePath(HttpServletRequest request, MultipartFile[] files, String currentPath) throws Exception;
 
     List<FileCustom> searchFile(HttpServletRequest request, String currentPath, String reg, String regType);
 

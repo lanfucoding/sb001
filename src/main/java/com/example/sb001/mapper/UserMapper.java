@@ -2,6 +2,7 @@ package com.example.sb001.mapper;
 
 import com.example.sb001.model.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author mxhc
@@ -12,6 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface UserMapper extends BaseMapper<User> {
 
     public String getCountSize(String username);
+    void reSize(@Param("username") String username, @Param("formatSize") String formatSize) throws Exception;
 }
 
 

@@ -6,6 +6,7 @@ import com.example.sb001.service.FileService;
 import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -18,6 +19,9 @@ public class FileController {
 
     @Autowired
     FileService fileService;
+    @Autowired
+    HttpServletRequest request;
+
     @RequestMapping("/getFiles")
     public Result<List<FileCustom>> getFiles(HttpServletRequest request,String path) {
         //根据项目路径及用户名、文件名获取上传文件的真实路径
@@ -53,5 +57,16 @@ public class FileController {
         } catch (Exception e) {
             return new Result<>(331, false, "添加失败");
         }
+    }
+
+    @RequestMapping("/upload")
+    public @ResponseBody Result<String> upload(
+            @RequestParam("files") MultipartFile[] files, String currentPath) {
+        try {
+            fileService.uploadFilePath(request, files, currentPath);
+        } catch (Exception e) {
+            return new Result<>(301, false, "上传失败");
+        }
+        return new Result<String>(305, true, "上传成功");
     }
 }
