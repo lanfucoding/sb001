@@ -1,6 +1,5 @@
 package com.example.sb001.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.sb001.mapper.FileMapper;
@@ -10,12 +9,14 @@ import com.example.sb001.model.*;
 import com.example.sb001.service.FileService;
 import com.example.sb001.utils.FileUtils;
 import com.example.sb001.utils.UserUtils;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -444,8 +445,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileSSO>
         }
     }
 
+
     public String countFileSize(HttpServletRequest request) {
-        long countFileSize = countFileSize(new File(getFileName(request, null)));
+        long countFileSize = countFileSize(new File(getFileName(request, "")));
         return FileUtils.getDataSize(countFileSize);
     }
     private long countFileSize(File srcFile) {
@@ -463,7 +465,17 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileSSO>
         }
         return count;
     }
-
+    @Override
+    public void respFile(HttpServletResponse response, HttpServletRequest request, String currentPath, String fileName, String type) throws IOException {
+        File file = new File(getFileName(request, currentPath), fileName);
+        InputStream inputStream = new FileInputStream(file);
+        if ("docum".equals(type)) {
+            response.setCharacterEncoding("UTF-8");
+            IOUtils.copy(inputStream, response.getWriter(), "UTF-8");
+        } else {
+            IOUtils.copy(inputStream, response.getOutputStream());
+        }
+    }
 }
 
 

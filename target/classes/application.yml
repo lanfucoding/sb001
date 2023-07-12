@@ -9,12 +9,13 @@ spring:
     view:
       prefix: /
       suffix: .jsp
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 server:
   port: 8080
 mybatis-plus:
   configuration:
     log-impl:  org.apache.ibatis.logging.stdout.StdOutImpl
 
-file:
-  path: file/**    #文件访问路径
-  address:  C:/Users/96592/Desktop/0 #文件保存路径

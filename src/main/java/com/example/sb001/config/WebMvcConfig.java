@@ -17,16 +17,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(new LoignInterceptor());
     }
 
-    @Value("${file.path}")
-    private String path;
 
-    @Value("${file.address}")
-    private String address;
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(path).addResourceLocations("file:" + address);
-    }
+
 
 
 }

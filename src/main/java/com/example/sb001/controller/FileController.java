@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -107,5 +109,12 @@ public class FileController {
         }
     }
 
-
+    @RequestMapping("/openFile")
+    public void openFile(HttpServletResponse response, String currentPath, String fileName, String fileType) {
+        try {
+            fileService.respFile(response, request, currentPath, fileName, fileType);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

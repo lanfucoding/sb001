@@ -9,6 +9,7 @@ import com.example.sb001.model.SummaryFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -53,4 +54,6 @@ public interface FileService extends IService<FileSSO> {
     void revertDirectory(HttpServletRequest request, int[] fileId) throws IOException;
 
     void delAllRecycle(HttpServletRequest request) throws Exception;
+
+    void respFile(HttpServletResponse response, HttpServletRequest request, String currentPath, String fileName, String type) throws IOException;
 }
