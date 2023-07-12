@@ -16,15 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -217,6 +216,77 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileSSO>
     public boolean addDirectory(HttpServletRequest request, String currentPath, String directoryName) {
         File file = new File(getFileName(request, currentPath), directoryName);
         return file.mkdir();
+    }
+
+    @Override
+    public File downPackage(HttpServletRequest request, String currentPath, String[] fileNames, String username) throws Exception {
+        File downloadFile = null;
+        if (currentPath == null) {
+            currentPath = "";
+        }
+        //单文件length为1
+        if (fileNames.length == 1) {
+            downloadFile = new File(getFileName(request, currentPath, username), fileNames[0]);
+            if (downloadFile.isFile()) {
+                return downloadFile;
+            }
+        }
+        String[] sourcePath = new String[fileNames.length];
+        for (int i = 0; i < fileNames.length; i++) {
+            sourcePath[i] = getFileName(request, currentPath, username) + File.separator + fileNames[i];
+        }
+        String packageZipName = packageZip(sourcePath);
+        downloadFile = new File(packageZipName);
+        return downloadFile;
+    }
+
+    @Override
+    public String packageZip(String[] sourcePath) throws Exception {
+        String zipName = sourcePath[0] + (sourcePath.length == 1 ? "" : "等" + sourcePath.length + "个文件") + ".zip";
+        ZipOutputStream zos = null;
+        try {
+            zos = new ZipOutputStream(new FileOutputStream(zipName));
+            for (String string : sourcePath) {
+                writeZos(new File(string), "", zos);
+            }
+        } finally {
+            if (zos != null) {
+                zos.close();
+            }
+        }
+        return zipName;
+    }
+
+    @Override
+    public void writeZos(File file, String basePath, ZipOutputStream zos) throws IOException {
+        if (!file.exists()) {
+            throw new FileNotFoundException();
+        }
+        if (file.isDirectory()) {
+            File[] listFiles = file.listFiles();
+            if (listFiles.length != 0) {
+                for (File childFile : listFiles) {
+                    writeZos(childFile, basePath + file.getName() + File.separator, zos);
+                }
+            }
+        } else {
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+            ZipEntry entry = new ZipEntry(basePath + file.getName());
+            zos.putNextEntry(entry);
+            int count = 0;
+            byte data[] = new byte[1024];
+            while ((count = bis.read(data)) != -1) {
+                zos.write(data, 0, count);
+            }
+            bis.close();
+        }
+    }
+
+    @Override
+    public void deleteDownPackage(File downloadFile) {
+        if (downloadFile.getName().endsWith("个文件.zip")) {
+            downloadFile.delete();
+        }
     }
 
     public SummaryFile summarylistFile(String realPath, int number) {

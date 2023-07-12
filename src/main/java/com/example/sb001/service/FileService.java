@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 /**
 * @author mxhc
@@ -21,6 +22,7 @@ import java.util.List;
 public interface FileService extends IService<FileSSO> {
     public boolean renameDirectory(HttpServletRequest request, String currentPath, String srcName, String destName);
     public void delDirectory(HttpServletRequest request, String currentPath, String[] directoryName) throws Exception;
+    public static final String PREFIX = "WEB-INF" + java.io.File.separator + "file" + java.io.File.separator;
 
     public void addNewNameSpace(HttpServletRequest request, String namespace);
 
@@ -33,6 +35,14 @@ public interface FileService extends IService<FileSSO> {
     List<FileCustom> searchFile(HttpServletRequest request, String currentPath, String reg, String regType);
 
     public boolean addDirectory(HttpServletRequest request, String currentPath, String directoryName);
+
+    File downPackage(HttpServletRequest request, String currentPath, String[] fileNames, String username) throws Exception;
+
+    String packageZip(String[] sourcePath) throws Exception;
+
+    void writeZos(File file, String basePath, ZipOutputStream zos) throws IOException;
+
+    void deleteDownPackage(File downloadFile);
 
     SummaryFile summarylistFile(String webrootpath, int number);
 

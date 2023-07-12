@@ -1,23 +1,23 @@
 package com.example.sb001.controller;
 
 import com.example.sb001.model.FileCustom;
-import com.example.sb001.model.RecycleFile;
 import com.example.sb001.model.Result;
-import com.example.sb001.model.SummaryFile;
+import com.example.sb001.model.ShareFile;
 import com.example.sb001.service.FileService;
+import com.example.sb001.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
 
-import static com.example.sb001.controller.UserController.pre;
-
-@Controller
+@RestController
 @RequestMapping("/user/file")
 public class FileController {
 
@@ -25,9 +25,10 @@ public class FileController {
     FileService fileService;
     @Autowired
     HttpServletRequest request;
+    @Autowired
+    ShareService shareService;
 
     @RequestMapping("/getFiles")
-    @ResponseBody
     public Result<List<FileCustom>> getFiles(HttpServletRequest request,String path) {
         //根据项目路径及用户名、文件名获取上传文件的真实路径
         String realPath = fileService.getFileName(request, path);
@@ -40,77 +41,11 @@ public class FileController {
         return result;
     }
 
-
-    @RequestMapping("/delDirectory")
-    public @ResponseBody Result<String> delDirectory(String currentPath,String[] directoryName) {
-        try {
-            fileService.delDirectory(request, currentPath, directoryName);
-            return new Result<>(346, true, "删除成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result<>(341, false, "删除失败");
-        }
-    }
-
-
-    @RequestMapping("/renameDirectory")
-    public @ResponseBody Result<String> renameDirectory(String currentPath,    String srcName, String destName) {
-        try {
-            fileService.renameDirectory(request, currentPath, srcName, destName);
-            return new Result<>(356, true, "重命名成功");
-        } catch (Exception e) {
-            return new Result<>(351, false, "重命名失败");
-        }
-    }
-
-
-    @RequestMapping("/summarylist")
-    public String summarylist(Model model) {
-        String webrootpath = fileService.getFileName(request, "");
-        int number = webrootpath.length();
-        SummaryFile rootlist = fileService.summarylistFile(webrootpath, number);
-        model.addAttribute("rootlist", rootlist);
-        return pre + "summarylist";
-    }
-
-    @RequestMapping("/copyDirectory")
-    public @ResponseBody Result<String> copyDirectory(String currentPath,String[] directoryName, String targetdirectorypath) throws Exception {
-        try {
-            fileService.copyDirectory(request, currentPath, directoryName,
-                    targetdirectorypath);
-            return new Result<>(366, true, "复制成功");
-        } catch (IOException e) {
-            return new Result<>(361, true, "复制失败");
-        }
-    }
-
-    @RequestMapping("/recycleFile")
-    public String recycleFile() {
-        try {
-            List<RecycleFile> findDelFile = fileService.recycleFiles(request);
-            if(null != findDelFile && findDelFile.size() != 0) {
-                request.setAttribute("findDelFile", findDelFile);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "recycle";
-    }
-
-    @RequestMapping("/revertDirectory")
-    public @ResponseBody Result<String> revertDirectory(int[] fileId) {
-        try {
-            fileService.revertDirectory(request, fileId);
-            return new Result<>(327, true, "还原成功");
-        } catch (Exception e) {
-            return new Result<>(322, false, "还原失败");
-        }
-    }
     @RequestMapping("/searchFile")
     public @ResponseBody Result<List<FileCustom>> searchFile(
-            String currentPath, String regType, HttpServletRequest request, String reg) {
+            String currentPath, String regType, HttpServletRequest request) {
         try {
-            List<FileCustom> searchFile = fileService.searchFile(request, currentPath, reg, regType);
+            List<FileCustom> searchFile = fileService.searchFile(request, currentPath, regType, regType);
             Result<List<FileCustom>> result = new Result<>(376, true, "查找成功");
             result.setData(searchFile);
             return result;
@@ -119,7 +54,7 @@ public class FileController {
             return new Result<>(371, false, "查找失败");
         }
     }
-    @ResponseBody
+
     @RequestMapping("/addDirectory")
     public  Result<String> addDirectory(String currentPath, String directoryName, HttpServletRequest request) {
         try {
@@ -140,4 +75,37 @@ public class FileController {
         }
         return new Result<String>(305, true, "上传成功");
     }
+
+    @RequestMapping("/download")
+    public ResponseEntity<byte[]> download(String currentPath, String[] downPath, String username) {
+        try {
+            String down = request.getParameter("downPath");
+            File downloadFile = fileService.downPackage(request, currentPath,downPath, username);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            String fileName = new String(downloadFile.getName().getBytes("utf-8"), "iso-8859-1");
+            headers.setContentDispositionFormData("attachment", fileName);
+            byte[] fileToByteArray = org.apache.commons.io.FileUtils.readFileToByteArray(downloadFile);
+            fileService.deleteDownPackage(downloadFile);
+            return new ResponseEntity<byte[]>(fileToByteArray, headers,    HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @RequestMapping("/shareFile")
+    public @ResponseBody Result<String> shareFile(HttpServletRequest request, String currentPath, String[] shareFile){
+        try {
+            String shareUrl = shareService.shareFile(request, currentPath, shareFile);
+            Result<String> result = new Result<>(405, true, "分享成功");
+            result.setData(shareUrl);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(401, false, "分享失败");
+        }
+    }
+
+
 }

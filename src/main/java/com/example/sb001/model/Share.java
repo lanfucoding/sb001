@@ -17,34 +17,25 @@ public class Share implements Serializable {
     /**
      * 
      */
+    public static final int PUBLIC = 1;
+    public static final int PRIVATE = 2;
+    public static final int CANCEL = 0;
+    public static final int DELETE = -1;
     @TableId(type = IdType.AUTO)
-    private Integer shareid;
+    private Integer shareId;
 
-    /**
-     * 
-     */
-    private String shareurl;
+    private String shareUrl;
 
-    /**
-     * 
-     */
     private String path;
 
-    /**
-     * 
-     */
-    private String shareuser;
+    private String shareUser;
 
-    /**
-     * 1公开 2加密 -1已取消
-     */
     private Integer status;
 
-    /**
-     * 提取码
-     */
     private String command;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+
 }

@@ -5,10 +5,10 @@
 <mapper namespace="com.example.sb001.mapper.ShareMapper">
 
     <resultMap id="BaseResultMap" type="com.example.sb001.model.Share">
-            <id property="shareid" column="shareId" jdbcType="INTEGER"/>
-            <result property="shareurl" column="shareUrl" jdbcType="VARCHAR"/>
+            <id property="shareId" column="shareId" jdbcType="INTEGER"/>
+            <result property="shareUrl" column="shareUrl" jdbcType="VARCHAR"/>
             <result property="path" column="path" jdbcType="VARCHAR"/>
-            <result property="shareuser" column="shareUser" jdbcType="VARCHAR"/>
+            <result property="shareUser" column="shareUser" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="TINYINT"/>
             <result property="command" column="command" jdbcType="VARCHAR"/>
     </resultMap>
@@ -17,4 +17,14 @@
         shareId,shareUrl,path,
         shareUser,status,command
     </sql>
+
+
+    <insert id="shareFile" parameterType="com.example.sb001.model.Share" >
+        insert into share(shareUrl, path, shareUser) values(#{shareUrl},#{path},#{shareUser})
+    </insert>
+
+
+    <select id="findShare" parameterType="com.example.sb001.model.Share" resultType="com.example.sb001.model.Share">
+        select * from share where shareUrl = #{shareUrl} and status = #{status}
+    </select>
 </mapper>
